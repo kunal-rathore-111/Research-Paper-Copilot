@@ -1,5 +1,3 @@
-
-
 // db functions
 const userService = require("../services/userService");
 
@@ -13,7 +11,13 @@ const signin = async (req, res) => {
 
     // jwt generation
     const token = createToken(userId);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    });
     res.json({ message: "Sign-in successfull" });
 
     // after signIn redirect to the home from fronted not here
