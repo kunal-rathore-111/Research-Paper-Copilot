@@ -1,4 +1,3 @@
-
 const API_KEY = process.env.GEMINI_API;
 
 const returnRawHtml = require("../utils/rawHtml");
@@ -8,6 +7,9 @@ async function generateHtml(conversation) {
   const { papers, summary, validation } = conversation.papers[0];
 
 
+  const papersText = Array.isArray(papers)
+    ? papers.map(p => (typeof p === 'string' ? p : p?.title || p?.url || JSON.stringify(p))).join(', ')
+    : '';
   const prompt = `
               You are an "HTML Agent". Format the following research assistant data into a visually appealing HTML page for pdf generation.
 
@@ -28,7 +30,7 @@ async function generateHtml(conversation) {
 
               Query: ${query}
               Answer: ${answer}
-              Papers: ${papers.join(', ')}
+              Papers: ${papersText}
               Summary: ${summary}
               Validation: ${JSON.stringify(validation)}
               `;

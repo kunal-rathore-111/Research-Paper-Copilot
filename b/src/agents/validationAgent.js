@@ -1,5 +1,3 @@
-
-
 const API_KEY = process.env.GEMINI_API;;
 
 async function validationAgent(summaryAgentAns, query) {
@@ -79,7 +77,7 @@ Return ONLY the JSON object.
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "x-goog-api-key": `${API_KEY} `,
+                    "x-goog-api-key": API_KEY, // removed trailing space
                 },
                 method: "POST",
                 body: JSON.stringify({
@@ -92,8 +90,8 @@ Return ONLY the JSON object.
             });
 
         if (!response.ok) {
-            const responseText = response.text();
-            throw new Error(`${responseText}`);
+            const responseText = await response.text(); // await it
+            throw new Error(responseText);
         }
         const output = await response.json();
         console.log("Output from vlaidation agent is- " + JSON.stringify(output));
@@ -106,7 +104,7 @@ Return ONLY the JSON object.
         return validationAgentAns;
     } catch (error) {
         console.log("Error in validation agent- " + error);
-        throw new Error();
+        throw new Error(error?.message || 'validationAgent failed');
     }
 }
 
