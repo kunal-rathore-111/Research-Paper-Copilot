@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 // errorMiddleare
 const errorHandler = require('./middlewares/errorMiddleware');
 
-//routes 
+//routes
 const routesIndex = require("./routes/routesIndex");
 
 const app = express();
