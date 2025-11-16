@@ -2,17 +2,44 @@
 
 function errorHandler(err, req, res, next) {
 
-    console.log(`\n\n\n ----------${JSON.stringify(err)}----------\n\n\n `);
+    // Log the full error for debugging
+    console.error(`\n========== ERROR ==========`);
+    console.error(`Path: ${req.method} ${req.path}`);
+    console.error(`Error:`, err);
+    console.error(`Stack:`, err.stack);
+    console.error(`===========================\n`);
 
-    let status = err.status || 500, message = err.message || 'Something wrong', type = err.type || 'Unknown error';
+    let status = err.status || 500;
+    let message = err.message || 'Something went wrong';
+    let type = err.type || 'Unknown error';
 
-    if (err.errorResponse && err.errorResponse.code === 11000) {    // when user tries to create acc even skip the debounce route 
+    // Handle MongoDB duplicate key error
+    if (err.errorResponse && err.errorResponse.code === 11000) {
         status = 409;
         type = 'Conflict';
         message = 'Already exists';
     }
 
-    res.status(status).json({ status: 'error', message: message, type: type });
+    // Handle MongoDB validation errors
+    if (err.name === 'ValidationError') {
+        status = 400;
+        type = 'ValidationError';
+        message = Object.values(err.errors).map(e => e.message).join(', ');
+    }
+
+    // Handle MongoDB cast errors
+    if (err.name === 'CastError') {
+        status = 400;
+        type = 'InvalidInput';
+        message = 'Invalid ID format';
+    }
+
+    res.status(status).json({ 
+        status: 'error', 
+        message: message, 
+        type: type,
+        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    });
 
 }
 
