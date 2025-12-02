@@ -112,13 +112,12 @@ export default class Register extends React.Component {
     } = this.state
 
     return (
-      <div className="min-h-[75vh] flex items-center justify-center px-4 py-10">
+      <div className="min-h-[75vh] flex items-center justify-center px-4 py-10" style={{ backgroundColor: '#F5F2ED' }}>
         <div className="w-full max-w-md relative group">
-          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-400 opacity-30 blur-xl group-hover:opacity-40 transition"></div>
-          <div className="relative bg-white/80 backdrop-blur-xl border border-white/50 shadow-xl rounded-3xl px-7 py-8 space-y-6">
+          <div className="relative bg-white/90 backdrop-blur-xl shadow-xl rounded-3xl px-7 py-8 space-y-6" style={{ border: '1px solid #d6d3d1' }}>
             <div className="text-center space-y-1">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent">Create your account</h2>
-              <p className="text-sm text-slate-500">Start exploring AI-assisted research flows.</p>
+              <h2 className="text-2xl font-bold text-center" style={{ color: '#2D2D2D' }}>Create your account</h2>
+              <p className="text-sm text-center" style={{ color: '#57534e' }}>Start exploring AI-assisted research flows.</p>
             </div>
 
             {infoMessage && (
@@ -206,11 +205,11 @@ export default class Register extends React.Component {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold tracking-wide shadow-md transition ${
-                    loading
-                      ? 'bg-indigo-400 cursor-wait'
-                      : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 hover:brightness-110 active:scale-[.98]'
-                  } text-white`}
+                  className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold tracking-wide shadow-md transition text-white ${loading
+                      ? 'cursor-wait'
+                      : 'hover:brightness-110 active:scale-[.98]'
+                    }`}
+                  style={{ backgroundColor: loading ? '#78716c' : '#2D2D2D' }}
                 >
                   {loading ? (
                     <>
@@ -231,7 +230,8 @@ export default class Register extends React.Component {
                 <button
                   type="button"
                   onClick={() => this.props.navigate && this.props.navigate('signin')}
-                  className="text-indigo-600 hover:text-indigo-700 font-medium transition"
+                  className="font-medium transition"
+                  style={{ color: '#FF6B4A' }}
                 >
                   Sign in
                 </button>

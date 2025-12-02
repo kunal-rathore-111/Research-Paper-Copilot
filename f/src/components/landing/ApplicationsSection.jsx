@@ -25,23 +25,23 @@ const applications = [
 
 export default function ApplicationsSection() {
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#EDE8E1' }}>
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl sm:text-5xl mb-4">
+                    <h2 className="text-4xl sm:text-5xl mb-4" style={{ color: '#2D2D2D' }}>
                         Built for
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"> Everyone</span>
+                        <span style={{ color: '#FF6B4A' }}> Everyone</span>
                     </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8">
                     {applications.map((app, index) => (
-                        <div key={index} className="p-8 bg-white border-slate-200 shadow-xl rounded-xl">
-                            <h3 className="text-2xl mb-2">{app.title}</h3>
-                            <p className="text-slate-600 mb-4">{app.description}</p>
+                        <div key={index} className="p-8 bg-white shadow-xl rounded-xl" style={{ border: '1px solid #d6d3d1' }}>
+                            <h3 className="text-2xl mb-2" style={{ color: '#2D2D2D' }}>{app.title}</h3>
+                            <p className="mb-4" style={{ color: '#57534e' }}>{app.description}</p>
                             <ul className="space-y-2">
                                 {app.benefits.map((benefit, idx) => (
-                                    <li key={idx} className="text-slate-700 text-sm">• {benefit}</li>
+                                    <li key={idx} className="text-sm" style={{ color: '#2D2D2D' }}>• {benefit}</li>
                                 ))}
                             </ul>
                         </div>

@@ -122,44 +122,24 @@ export default class App extends React.Component {
     return <div className="p-8">Not found</div>
   }
 
+  logout() {
+    // In a real app with HttpOnly cookies, we would call an API endpoint to clear the cookie.
+    // For now, we'll just update the state as requested.
+    this.setState({ authed: false, route: 'landing' })
+    // If the cookie is accessible via JS, we could try to clear it:
+    document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+  }
+
   render() {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-sky-50 to-white selection:bg-indigo-600/90 selection:text-white">
-        <header className="bg-white/70 backdrop-blur-xl border-b border-white/40 shadow-sm sticky top-0 z-30">
-          <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <div
-                className="text-xl font-extrabold bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent cursor-pointer hover:scale-[1.03] transition"
-                onClick={() => this.navigate('landing')}
-              >
-                Research App
-              </div>
-              <nav className="hidden sm:flex text-sm font-medium gap-5">
-                <button onClick={() => this.navigate('landing')} className="nav-underline text-slate-600 hover:text-indigo-600 transition">Home</button>
-                <button onClick={() => this.navigate('register')} className="nav-underline text-slate-600 hover:text-indigo-600 transition">Register</button>
-                <button onClick={() => this.navigate('signin')} className="nav-underline text-slate-600 hover:text-indigo-600 transition">Sign in</button>
-                <button onClick={() => this.navigate('dashboard')} className="nav-underline text-slate-600 hover:text-indigo-600 transition">Dashboard</button>
-              </nav>
-            </div>
-            <div className="text-xs sm:text-sm px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-sky-500 text-white shadow">
-              {this.state.authed ? 'Signed in' : 'Guest'}
-            </div>
-          </div>
-        </header>
+      <div className="min-h-screen" style={{ backgroundColor: '#F5F2ED' }}>
+        <Nav navigate={this.navigate} authed={this.state.authed} logout={() => this.logout()} />
 
         <main className="max-w-full">
           {this.renderContent()}
         </main>
 
-        {this.state.route !== 'landing' && (
-          <footer className="mt-auto py-10 text-center text-xs text-slate-500">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/60 backdrop-blur-md shadow-sm border border-white/40">
-              <span>© {new Date().getFullYear()} Research Co-Pilot</span>
-              <span className="text-slate-300">•</span>
-              <span className="hover:text-indigo-600 transition cursor-default">Focused AI Retrieval</span>
-            </div>
-          </footer>
-        )}
+
       </div>
     )
   }

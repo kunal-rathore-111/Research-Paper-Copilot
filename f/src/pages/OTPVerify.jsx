@@ -37,11 +37,10 @@ export default class OTPVerify extends React.Component {
 
   render() {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center px-5 py-12">
+      <div className="min-h-[60vh] flex items-center justify-center px-5 py-12" style={{ backgroundColor: '#F5F2ED' }}>
         <div className="w-full max-w-sm relative group">
-          <div className="absolute -inset-1 bg-gradient-to-br from-indigo-600 via-purple-600 to-sky-500 rounded-3xl blur-lg opacity-30 group-hover:opacity-40 transition"></div>
-          <div className="relative bg-white/85 backdrop-blur-xl border border-white/50 shadow-lg rounded-3xl px-7 py-8 space-y-6">
-            <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent text-center">
+          <div className="relative bg-white/90 backdrop-blur-xl shadow-lg rounded-3xl px-7 py-8 space-y-6" style={{ border: '1px solid #d6d3d1' }}>
+            <h2 className="text-xl font-bold text-center" style={{ color: '#2D2D2D' }}>
               OTP Verification
             </h2>
             {!this.props.token && (
@@ -73,9 +72,10 @@ export default class OTPVerify extends React.Component {
                   type="submit"
                   disabled={!this.props.token}
                   className={`w-full px-5 py-3 rounded-xl text-sm font-semibold tracking-wide shadow-md transition ${!this.props.token
-                      ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 hover:brightness-110 active:scale-[.98] text-white'
-                    }`}
+                    ? 'cursor-not-allowed'
+                    : 'hover:brightness-110 active:scale-[.98]'
+                    } text-white`}
+                  style={{ backgroundColor: !this.props.token ? '#a8a29e' : '#2D2D2D' }}
                 >
                   Verify OTP
                 </button>

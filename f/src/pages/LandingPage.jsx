@@ -12,7 +12,7 @@ import Footer from '../components/landing/Footer'
 export default function LandingPage({ navigate }) {
     return (
         <ReactLenis root options={{ duration: 1.2 }}>
-            <div className="min-h-screen bg-white">
+            <div className="min-h-screen" style={{ backgroundColor: '#F5F2ED' }}>
                 <HeroSection navigate={navigate} />
                 <ProblemSection />
                 <SolutionSection />

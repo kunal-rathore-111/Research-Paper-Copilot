@@ -9,35 +9,35 @@ const teamMembers = [
 
 export default function TeamSection() {
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#F5F2ED' }}>
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl sm:text-5xl mb-4">
+                    <h2 className="text-4xl sm:text-5xl mb-4" style={{ color: '#2D2D2D' }}>
                         Our
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"> Team</span>
+                        <span style={{ color: '#FF6B4A' }}> Team</span>
                     </h2>
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {teamMembers.map((member, index) => (
-                        <div key={index} className="p-6 bg-white border-slate-200 shadow-lg rounded-xl text-center">
-                            <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl mx-auto mb-4">
+                        <div key={index} className="p-6 bg-white shadow-lg rounded-xl text-center" style={{ border: '1px solid #d6d3d1' }}>
+                            <div className="w-20 h-20 rounded-full flex items-center justify-center text-white text-xl mx-auto mb-4" style={{ backgroundColor: '#FF6B4A' }}>
                                 {member.initials}
                             </div>
-                            <h4 className="text-lg mb-1">{member.name}</h4>
-                            <p className="text-sm text-slate-600 mb-4">{member.role}</p>
+                            <h4 className="text-lg mb-1" style={{ color: '#2D2D2D' }}>{member.name}</h4>
+                            <p className="text-sm mb-4" style={{ color: '#57534e' }}>{member.role}</p>
                             <div className="flex flex-wrap gap-2 justify-center">
                                 {member.skills.map((skill, idx) => (
-                                    <span key={idx} className="text-xs px-2 py-1 bg-slate-100 rounded">{skill}</span>
+                                    <span key={idx} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: '#EDE8E1', color: '#2D2D2D' }}>{skill}</span>
                                 ))}
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="mt-16 p-8 bg-gradient-to-br from-slate-900 to-blue-900 text-white rounded-2xl text-center">
+                <div className="mt-16 p-8 text-white rounded-2xl text-center" style={{ backgroundColor: '#2D2D2D' }}>
                     <h3 className="text-2xl mb-4">Special Thanks</h3>
-                    <p className="text-blue-200">
+                    <p style={{ color: '#d6d3d1' }}>
                         We would like to express our gratitude to Acropolis Institute of Technology and Research, the Information Technology Department,
                         and our project guide Prof. Ankita Agrawal for their continuous support and guidance throughout this project.
                     </p>

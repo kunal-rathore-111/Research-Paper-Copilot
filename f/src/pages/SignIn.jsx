@@ -68,13 +68,12 @@ export default class SignIn extends React.Component {
     const { email, password, loading, errors, infoMessage } = this.state
 
     return (
-      <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
+      <div className="min-h-[70vh] flex items-center justify-center px-4 py-12" style={{ backgroundColor: '#F5F2ED' }}>
         <div className="w-full max-w-md relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-40 transition"></div>
-          <div className="relative bg-white/85 backdrop-blur-xl border border-white/50 shadow-xl rounded-3xl px-7 py-8 space-y-6">
+          <div className="relative bg-white/90 backdrop-blur-xl shadow-xl rounded-3xl px-7 py-8 space-y-6" style={{ border: '1px solid #d6d3d1' }}>
             <div className="space-y-1 text-center">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent">Welcome back</h2>
-              <p className="text-sm text-slate-500">Continue your research journey.</p>
+              <h2 className="text-2xl font-bold text-center" style={{ color: '#2D2D2D' }}>Welcome back</h2>
+              <p className="text-sm text-center" style={{ color: '#57534e' }}>Continue your research journey.</p>
             </div>
 
             {infoMessage && (
@@ -126,11 +125,11 @@ export default class SignIn extends React.Component {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold tracking-wide shadow-md transition ${
-                    loading
-                      ? 'bg-indigo-400 cursor-wait'
-                      : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 hover:brightness-110 active:scale-[.98]'
-                  } text-white`}
+                  className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold tracking-wide shadow-md transition text-white ${loading
+                      ? 'cursor-wait'
+                      : 'hover:brightness-110 active:scale-[.98]'
+                    }`}
+                  style={{ backgroundColor: loading ? '#78716c' : '#2D2D2D' }}
                 >
                   {loading ? (
                     <>
@@ -150,14 +149,18 @@ export default class SignIn extends React.Component {
                 <button
                   type="button"
                   onClick={() => this.props.navigate && this.props.navigate('register')}
-                  className="font-medium text-indigo-600 hover:text-indigo-700 transition"
+                  className="font-medium transition"
+                  style={{ color: '#FF6B4A' }}
                 >
                   Create account
                 </button>
                 <button
                   type="button"
                   onClick={() => alert('Password reset flow not implemented yet.')}
-                  className="hover:text-indigo-600 transition"
+                  className="transition"
+                  style={{ color: '#57534e' }}
+                  onMouseEnter={(e) => e.target.style.color = '#FF6B4A'}
+                  onMouseLeave={(e) => e.target.style.color = '#57534e'}
                 >
                   Forgot password?
                 </button>

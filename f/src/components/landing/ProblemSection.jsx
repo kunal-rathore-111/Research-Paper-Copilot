@@ -29,33 +29,33 @@ const problems = [
 
 export default function ProblemSection() {
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#EDE8E1' }}>
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 rounded-full px-4 py-2 mb-6">
+                    <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6" style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)', color: '#FF6B4A' }}>
                         <span className="text-sm">Current Challenges</span>
                     </div>
-                    <h2 className="text-4xl sm:text-5xl mb-4">
+                    <h2 className="text-4xl sm:text-5xl mb-4" style={{ color: '#2D2D2D' }}>
                         The Research
-                        <span className="text-red-600"> Problem</span>
+                        <span style={{ color: '#FF6B4A' }}> Problem</span>
                     </h2>
-                    <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                    <p className="text-xl max-w-3xl mx-auto" style={{ color: '#57534e' }}>
                         Modern researchers struggle with an overwhelming amount of information and limited time to process it effectively.
                     </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {problems.map((problem, index) => (
-                        <div key={index} className="p-6 bg-white border-slate-200 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden group rounded-xl">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-100 to-transparent rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                        <div key={index} className="p-6 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden group rounded-xl" style={{ border: '1px solid #d6d3d1' }}>
+                            <div className="absolute top-0 right-0 w-24 h-24 rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)' }}></div>
 
                             <div className="relative">
-                                <h3 className="text-xl mb-2">{problem.title}</h3>
-                                <p className="text-slate-600 mb-6 text-sm leading-relaxed">{problem.description}</p>
+                                <h3 className="text-xl mb-2" style={{ color: '#2D2D2D' }}>{problem.title}</h3>
+                                <p className="mb-6 text-sm leading-relaxed" style={{ color: '#57534e' }}>{problem.description}</p>
 
-                                <div className="pt-4 border-t border-slate-200">
-                                    <div className="text-2xl text-red-600">{problem.stat}</div>
-                                    <div className="text-xs text-slate-500">{problem.statLabel}</div>
+                                <div className="pt-4" style={{ borderTop: '1px solid #d6d3d1' }}>
+                                    <div className="text-2xl" style={{ color: '#FF6B4A' }}>{problem.stat}</div>
+                                    <div className="text-xs" style={{ color: '#78716c' }}>{problem.statLabel}</div>
                                 </div>
                             </div>
                         </div>
