@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const applications = [
     {
@@ -27,16 +28,30 @@ export default function ApplicationsSection() {
     return (
         <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#EDE8E1' }}>
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16">
+                <motion.div
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.6 }}
+                >
                     <h2 className="text-4xl sm:text-5xl mb-4" style={{ color: '#2D2D2D' }}>
                         Built for
                         <span style={{ color: '#FF6B4A' }}> Everyone</span>
                     </h2>
-                </div>
+                </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-8">
                     {applications.map((app, index) => (
-                        <div key={index} className="p-8 bg-white shadow-xl rounded-xl" style={{ border: '1px solid #d6d3d1' }}>
+                        <motion.div
+                            key={index}
+                            className="p-8 bg-white shadow-xl rounded-xl"
+                            style={{ border: '1px solid #d6d3d1' }}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
                             <h3 className="text-2xl mb-2" style={{ color: '#2D2D2D' }}>{app.title}</h3>
                             <p className="mb-4" style={{ color: '#57534e' }}>{app.description}</p>
                             <ul className="space-y-2">
@@ -44,7 +59,7 @@ export default function ApplicationsSection() {
                                     <li key={idx} className="text-sm" style={{ color: '#2D2D2D' }}>• {benefit}</li>
                                 ))}
                             </ul>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

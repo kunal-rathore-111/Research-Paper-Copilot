@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const features = [
     { title: "Lightning Fast", description: "Process research papers in seconds, not hours", color: "from-yellow-500 to-orange-500" },
@@ -16,7 +17,13 @@ export default function FeaturesSection() {
         <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ backgroundColor: '#EDE8E1' }}>
 
             <div className="max-w-7xl mx-auto relative">
-                <div className="text-center mb-16">
+                <motion.div
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.8 }}
+                    transition={{ duration: 0.6 }}
+                >
                     <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6" style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)', color: '#FF6B4A' }}>
                         <span className="text-sm">Powerful Features</span>
                     </div>
@@ -27,11 +34,21 @@ export default function FeaturesSection() {
                     <p className="text-xl max-w-3xl mx-auto" style={{ color: '#57534e' }}>
                         Advanced features designed to accelerate your research workflow and boost productivity.
                     </p>
-                </div>
+                </motion.div>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <motion.div
+                    className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.6 }}
+                >
                     {features.map((feature, index) => (
-                        <div key={index} className="p-6 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group rounded-xl" style={{ border: '1px solid #d6d3d1' }}>
+                        <div
+                            key={index}
+                            className="p-6 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group rounded-xl"
+                            style={{ border: '1px solid #d6d3d1' }}
+                        >
                             <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300" style={{ backgroundColor: '#FF6B4A' }}></div>
 
                             <div className="relative">
@@ -40,7 +57,7 @@ export default function FeaturesSection() {
                             </div>
                         </div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     )

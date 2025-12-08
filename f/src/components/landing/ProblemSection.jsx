@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const problems = [
     {
@@ -31,7 +32,13 @@ export default function ProblemSection() {
     return (
         <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#EDE8E1' }}>
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16">
+                <motion.div
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.6 }}
+                >
                     <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6" style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)', color: '#FF6B4A' }}>
                         <span className="text-sm">Current Challenges</span>
                     </div>
@@ -42,11 +49,19 @@ export default function ProblemSection() {
                     <p className="text-xl max-w-3xl mx-auto" style={{ color: '#57534e' }}>
                         Modern researchers struggle with an overwhelming amount of information and limited time to process it effectively.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {problems.map((problem, index) => (
-                        <div key={index} className="p-6 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden group rounded-xl" style={{ border: '1px solid #d6d3d1' }}>
+                        <motion.div
+                            key={index}
+                            className="p-6 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden group rounded-xl"
+                            style={{ border: '1px solid #d6d3d1' }}
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
                             <div className="absolute top-0 right-0 w-24 h-24 rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)' }}></div>
 
                             <div className="relative">
@@ -58,7 +73,7 @@ export default function ProblemSection() {
                                     <div className="text-xs" style={{ color: '#78716c' }}>{problem.statLabel}</div>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

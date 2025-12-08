@@ -12,6 +12,7 @@
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.1.16",
+    "framer-motion": "^12.23.25",
     "lenis": "^1.1.17",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

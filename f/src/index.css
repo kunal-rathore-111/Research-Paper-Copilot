@@ -52,7 +52,7 @@ body {
 
   /* Scrollbar */
   body::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
 
   body::-webkit-scrollbar-track {
@@ -60,8 +60,8 @@ body {
   }
 
   body::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-    border-radius: 999px;
+    background: #d4d4d4;
+    border-radius: 4px;
   }
 
   body.dark {

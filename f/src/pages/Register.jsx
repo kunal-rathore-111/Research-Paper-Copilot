@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { checkEmail, register } from '../api'
 
 export default class Register extends React.Component {
@@ -113,7 +114,12 @@ export default class Register extends React.Component {
 
     return (
       <div className="min-h-[75vh] flex items-center justify-center px-4 py-10" style={{ backgroundColor: '#F5F2ED' }}>
-        <div className="w-full max-w-md relative group">
+        <motion.div
+          className="w-full max-w-md relative group"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           <div className="relative bg-white/90 backdrop-blur-xl shadow-xl rounded-3xl px-7 py-8 space-y-6" style={{ border: '1px solid #d6d3d1' }}>
             <div className="text-center space-y-1">
               <h2 className="text-2xl font-bold text-center" style={{ color: '#2D2D2D' }}>Create your account</h2>
@@ -206,8 +212,8 @@ export default class Register extends React.Component {
                   type="submit"
                   disabled={loading}
                   className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold tracking-wide shadow-md transition text-white ${loading
-                      ? 'cursor-wait'
-                      : 'hover:brightness-110 active:scale-[.98]'
+                    ? 'cursor-wait'
+                    : 'hover:brightness-110 active:scale-[.98]'
                     }`}
                   style={{ backgroundColor: loading ? '#78716c' : '#2D2D2D' }}
                 >
@@ -238,7 +244,7 @@ export default class Register extends React.Component {
               </div>
             </form>
           </div>
-        </div>
+        </motion.div>
       </div>
     )
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const agents = [
     {
@@ -41,7 +42,13 @@ export default function SolutionSection() {
         <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ backgroundColor: '#F5F2ED' }}>
 
             <div className="max-w-7xl mx-auto relative">
-                <div className="text-center mb-16">
+                <motion.div
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.6 }}
+                >
                     <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6" style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)', color: '#FF6B4A' }}>
                         <span className="text-sm">Our Solution</span>
                     </div>
@@ -52,11 +59,19 @@ export default function SolutionSection() {
                     <p className="text-xl max-w-3xl mx-auto" style={{ color: '#57534e' }}>
                         A collaborative multi-agent system that automates the entire research workflow from discovery to validation.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid lg:grid-cols-3 gap-8 mb-12">
                     {agents.map((agent, index) => (
-                        <div key={index} className="p-8 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden group rounded-xl" style={{ border: '1px solid #d6d3d1' }}>
+                        <motion.div
+                            key={index}
+                            className="p-8 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden group rounded-xl"
+                            style={{ border: '1px solid #d6d3d1' }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.5, delay: index * 0.15 }}
+                        >
                             <div className="absolute top-0 right-0 w-32 h-32 rounded-bl-full group-hover:opacity-20 transition-opacity opacity-10" style={{ backgroundColor: '#FF6B4A' }}></div>
 
                             <div className="relative">
@@ -72,11 +87,18 @@ export default function SolutionSection() {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
 
-                <div className="rounded-2xl p-8 sm:p-12 text-white shadow-2xl" style={{ backgroundColor: '#2D2D2D' }}>
+                <motion.div
+                    className="rounded-2xl p-8 sm:p-12 text-white shadow-2xl"
+                    style={{ backgroundColor: '#2D2D2D' }}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                >
                     <h3 className="text-2xl sm:text-3xl mb-8 text-center">How They Work Together</h3>
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="text-center">
@@ -95,7 +117,7 @@ export default function SolutionSection() {
                             <p className="text-sm" style={{ color: '#d6d3d1' }}>Validation Agent checks credibility and assesses research quality</p>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     )

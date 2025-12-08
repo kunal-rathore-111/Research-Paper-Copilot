@@ -1,9 +1,17 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 export default function Footer() {
     return (
         <footer style={{ backgroundColor: '#2D2D2D' }}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" style={{ color: '#d6d3d1' }}>
+            <motion.div
+                className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+                style={{ color: '#d6d3d1' }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6 }}
+            >
                 <div className="grid md:grid-cols-4 gap-8 mb-8">
                     <div>
                         <h3 className="text-white text-lg mb-4">Research Paper Co-Pilot</h3>
@@ -26,14 +34,14 @@ export default function Footer() {
                     </div>
                     <div>
                         <h4 className="text-white mb-4">Contact Us</h4>
-                        <p className="text-sm">Prof. Ankita Agrawal</p>
-                        <p className="text-sm text-slate-400">ankitaagrawal@acropolis.in</p>
+                        <p className="text-sm">Team DeepDraft</p>
+                        <a href="mailto:deepdraft11@gmail.com" className="text-sm text-slate-400">deepdraft11@gmail.com</a>
                     </div>
                 </div>
                 <div className="pt-8 border-t border-slate-800 text-center text-sm">
                     © 2025 Research Paper Co-Pilot. Minor Project - Information Technology Department.
                 </div>
-            </div>
+            </motion.div>
         </footer>
     )
 }

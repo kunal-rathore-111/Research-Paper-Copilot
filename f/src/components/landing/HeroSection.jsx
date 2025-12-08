@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 export default function HeroSection({ navigate }) {
+    const [typingComplete, setTypingComplete] = useState(false)
+
+    useEffect(() => {
+        // Mark animations as complete for subtitle
+        const completeTimer = setTimeout(() => {
+            setTypingComplete(true)
+        }, 1000)
+
+        return () => clearTimeout(completeTimer)
+    }, [])
+
     return (
         <section className="relative overflow-hidden" style={{ backgroundColor: '#F5F2ED', color: '#2D2D2D' }}>
 
@@ -8,16 +20,36 @@ export default function HeroSection({ navigate }) {
                 {/* Main Heading */}
                 <div className="space-y-6 mb-12">
                     <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-normal tracking-tight leading-tight">
-                        Welcome to
+                        {/* "Welcome to" fades in smoothly */}
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                        >
+                            Welcome to
+                        </motion.span>
                         <br />
-                        <span style={{ color: '#FF6B4A', fontStyle: 'italic' }}>DeepDraft</span> Research
+                        {/* "DeepDraft Research" fades in as one smooth block */}
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+                        >
+                            <span style={{ color: '#FF6B4A', fontStyle: 'italic' }}>DeepDraft</span> Research
+                        </motion.span>
                     </h1>
 
-                    <p className="text-base sm:text-lg max-w-2xl mx-auto font-light" style={{ color: '#57534e' }}>
+                    <motion.p
+                        className="text-base sm:text-lg max-w-2xl mx-auto font-light"
+                        style={{ color: '#57534e' }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={typingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                    >
                         Beautifully designed, AI-powered, and packed with features.
                         <br />
                         We care about your research.
-                    </p>
+                    </motion.p>
                 </div>
 
                 {/* CTA Buttons */}
