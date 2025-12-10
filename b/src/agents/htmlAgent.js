@@ -38,35 +38,39 @@ async function generateHtml(conversation) {
   console.log("executing htmlagent");
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+    const response = await fetch("https://api.openai.com/v1/chat/completions",
       {
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         method: "POST",
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: prompt
-            }]
-          }]
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "user",
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
         })
       }
     )
 
     if (!response.ok) {
       const responseText = await response.text();
-      console.error("Gemini API error response:", responseText);
-      throw new Error(`Gemini API error: ${response.status} - ${responseText}`);
+      console.error("OpenAI API error response:", responseText);
+      throw new Error(`OpenAI API error: ${response.status} - ${responseText}`);
     }
 
     const rawHtml = await response.json();
-    console.log("htmlagent executed successfully with Gemini");
+    console.log("htmlagent executed successfully with OpenAI");
 
-    const html = rawHtml?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const html = rawHtml?.choices?.[0]?.message?.content;
 
     if (!html || html.trim() === '') {
-      console.error("Empty output from Gemini. Full response:", JSON.stringify(rawHtml, null, 2));
+      console.error("Empty output from OpenAI. Full response:", JSON.stringify(rawHtml, null, 2));
       throw new Error("Model returned empty HTML response.");
     }
 
