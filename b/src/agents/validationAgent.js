@@ -73,37 +73,47 @@ Return ONLY the JSON object.
 
 
     try {
-        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions",
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "x-goog-api-key": API_KEY, // removed trailing space
+                    "Authorization": `Bearer ${API_KEY}`,
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    contents: [
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
                         {
-                            parts: [{ text: prompt }]
+                            role: "user",
+                            content: prompt
                         }
-                    ]
+                    ],
+                    temperature: 0.5,
+                    max_tokens: 4096
                 })
             });
 
         if (!response.ok) {
-            const responseText = await response.text(); // await it
-            throw new Error(responseText);
+            const responseText = await response.text();
+            console.error("Groq API error response:", responseText);
+            throw new Error(`Groq API error: ${responseText}`);
         }
+
         const output = await response.json();
-        console.log("Output from vlaidation agent is- " + JSON.stringify(output));
+        console.log("Groq API response status:", output);
 
-        const validationAgentAns = output.candidates[0].content.parts[0].text;
+        const validationAgentAns = output?.choices?.[0]?.message?.content;
 
+        if (!validationAgentAns || validationAgentAns.trim() === '') {
+            console.error("Empty output from Groq. Full response:", JSON.stringify(output, null, 2));
+            throw new Error("Model returned empty response. This might be due to content filtering or token limits.");
+        }
 
-        console.log("validationAgent executed");
+        console.log("validationAgent executed successfully");
 
         return validationAgentAns;
     } catch (error) {
-        console.log("Error in validation agent- " + error);
+        console.error("Error in validation agent:", error.message);
         throw new Error(error?.message || 'validationAgent failed');
     }
 }

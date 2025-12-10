@@ -18,7 +18,11 @@ const signup = async (req, res) => {
 
     await sendOtp(req.body.email, otp);
 
-    res.json({ message: "OTP sent", redirectUrl: `${process.env.BACKEND_BASE_Url}/auth/email-register/otp-verification?token=${signUpToken}` });
+    res.json({
+        message: "OTP sent",
+        token: signUpToken,
+        redirectUrl: `${process.env.BACKEND_BASE_Url}/auth/email-register/otp-verification?token=${signUpToken}`
+    });
 
 }
 

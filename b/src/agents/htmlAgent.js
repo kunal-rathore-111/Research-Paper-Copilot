@@ -37,7 +37,7 @@ async function generateHtml(conversation) {
 
   console.log("executing htmlagent");
   try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
       {
         headers: {
           "x-goog-api-key": `${API_KEY}`,
