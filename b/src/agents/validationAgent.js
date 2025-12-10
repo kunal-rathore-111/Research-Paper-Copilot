@@ -15,6 +15,13 @@ Your task is to validate the AI-generated summary and associated papers based on
 
 **Summary Agent Output**: """${summaryAgentAns}"""
 
+**Handling Invalid/Unclear Queries**:
+If the query is nonsensical, gibberish, or "dust" (unintelligible), or if no valid research can be derived:
+1. Set "answer" to a single-line message requesting a clearer query (e.g., "The query provided is unclear; please provide a more specific research topic.").
+2. Set "summary" to "No summary available for this query." (Must not be empty).
+3. Set "papers" to an empty array [].
+4. Set "validation" object with "isValid": false, "score": 0, "feedback": "Query is unclear or invalid.", "citations": [].
+
 **Validation Requirements**:
 1.  **Top-level fields MUST include**:
     *   "answer" (string, required, **non-empty**): A concise AI-powered summary of the query.
@@ -39,9 +46,13 @@ Your task is to validate the AI-generated summary and associated papers based on
 *   Ensure all strings are properly quoted and escape any internal quotes if necessary.
 *   The final output MUST be a parseable JSON object.
 *   **Crucially, ensure all required string fields (answer, summary, paperId, title, authors[i], url) are populated with meaningful, non-empty values. If information is truly unavailable for a paper's URL, use "not provided".**
-* Give me a lot of necessary data and specially answer and summary having atleast 2-3 pages in for pdf parsing.
-
-  
+* **CRITICAL: Generate EXTENSIVE and COMPREHENSIVE content:**
+    * The "answer" field should be AT LEAST 400-600 words - provide a thorough, detailed response to the query with context, explanations, and insights.
+    * The "summary" field should be AT LEAST 800-1200 words - create a comprehensive synthesis of ALL papers with detailed analysis, comparisons, key insights, methodologies, results, and implications.
+    * Aim for 2-3 full pages of rich, informative content when rendered as PDF.
+    * Include specific details, technical information, metrics, and quantitative results.
+    * Provide in-depth analysis and contextualization of the research.
+   
 **Example of Desired Output Format (Schema)**:
 {
     "answer": "string_answer_here",
@@ -71,47 +82,58 @@ Your task is to validate the AI-generated summary and associated papers based on
 Return ONLY the JSON object.
 `;
 
-
     try {
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions",
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${API_KEY}`,
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.5,
-                    max_tokens: 4096
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
                 })
             });
 
         if (!response.ok) {
             const responseText = await response.text();
-            console.error("Groq API error response:", responseText);
-            throw new Error(`Groq API error: ${responseText}`);
+            console.error("Gemini API error response:", responseText);
+            throw new Error(`Gemini API error: ${responseText}`);
         }
 
         const output = await response.json();
-        console.log("Groq API response status:", output);
+        console.log("Gemini API response received");
 
-        const validationAgentAns = output?.choices?.[0]?.message?.content;
+        const validationAgentAns = output?.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (!validationAgentAns || validationAgentAns.trim() === '') {
-            console.error("Empty output from Groq. Full response:", JSON.stringify(output, null, 2));
+            console.error("Empty output from Gemini. Full response:", JSON.stringify(output, null, 2));
             throw new Error("Model returned empty response. This might be due to content filtering or token limits.");
         }
 
+        // Strip markdown code blocks if present (```json ... ``` or ``` ... ```)
+        let cleanedResponse = validationAgentAns.trim();
+
+        // Remove ```json at the start
+        if (cleanedResponse.startsWith('```json')) {
+            cleanedResponse = cleanedResponse.slice(7); // Remove ```json
+        } else if (cleanedResponse.startsWith('```')) {
+            cleanedResponse = cleanedResponse.slice(3); // Remove ```
+        }
+
+        // Remove ``` at the end
+        if (cleanedResponse.endsWith('```')) {
+            cleanedResponse = cleanedResponse.slice(0, -3);
+        }
+
+        cleanedResponse = cleanedResponse.trim();
+
         console.log("validationAgent executed successfully");
 
-        return validationAgentAns;
+        return cleanedResponse;
     } catch (error) {
         console.error("Error in validation agent:", error.message);
         throw new Error(error?.message || 'validationAgent failed');

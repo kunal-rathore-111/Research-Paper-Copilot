@@ -27,7 +27,10 @@ async function summaryAgent(searchAgentAns, query) {
             2. Key Findings:
             3. Important Limitations:
             4. Links:
-        7. Give me lot of necessary data specially summary.    
+        7. **CRITICAL: Provide extensive, comprehensive, and detailed summaries. Each paper should have AT LEAST 300-500 words of analysis. Include technical details, methodologies, results, implications, and future work. Make the output rich and informative - aim for 2-3 full pages of content when rendered as PDF.**
+        8. **Add detailed comparative analysis between papers where applicable.**
+        9. **Include specific metrics, numbers, and quantitative results mentioned in the abstracts.**
+        10. **Discuss the broader context and significance of each paper's contributions.**
 
         Papers: ${dataInString}
         `
@@ -42,39 +45,34 @@ async function summaryAgent(searchAgentAns, query) {
     }
 
     try {
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions",
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${API_KEY}`,
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 4096
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
                 })
             });
 
         if (!response.ok) {
             const responseText = await response.text();
-            console.error("Groq API error response:", responseText);
-            throw new Error(`Groq API error: ${responseText}`);
+            console.error("Gemini API error response:", responseText);
+            throw new Error(`Gemini API error: ${responseText}`);
         }
 
         const rawData = await response.json();
-        console.log("Groq API response status:", rawData);
+        console.log("Gemini API response received");
 
-        const output = rawData?.choices?.[0]?.message?.content;
+        const output = rawData?.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (!output || output.trim() === '') {
-            console.error("Empty output from Groq. Full response:", JSON.stringify(rawData, null, 2));
+            console.error("Empty output from Gemini. Full response:", JSON.stringify(rawData, null, 2));
             throw new Error("Model returned empty response. This might be due to content filtering or token limits.");
         }
 

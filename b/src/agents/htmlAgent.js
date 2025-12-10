@@ -36,36 +36,45 @@ async function generateHtml(conversation) {
               `;
 
   console.log("executing htmlagent");
+
   try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
       {
         headers: {
-          "x-goog-api-key": `${API_KEY}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: prompt }]
+            parts: [{
+              text: prompt
+            }]
           }]
         })
       }
     )
-    console.log(" htmlagent executed");
+
     if (!response.ok) {
       const responseText = await response.text();
-      throw new Error(`Error in html agent ${response.status}- ${responseText}`);
+      console.error("Gemini API error response:", responseText);
+      throw new Error(`Gemini API error: ${response.status} - ${responseText}`);
     }
+
     const rawHtml = await response.json();
-    const html = rawHtml?.candidates[0]?.content?.parts[0]?.text;
-    if (!html) {
-      throw new Error("No response from the html agent");
+    console.log("htmlagent executed successfully with Gemini");
+
+    const html = rawHtml?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!html || html.trim() === '') {
+      console.error("Empty output from Gemini. Full response:", JSON.stringify(rawHtml, null, 2));
+      throw new Error("Model returned empty HTML response.");
     }
+
     console.log(`\n\n\n\n${html}\n\n\n`);
     return html;
 
   } catch (error) {
-    console.log("Error in html agent- " + error);
+    console.error("Error in html agent:", error.message);
     return returnRawHtml(query, answer, papers, summary, validation);
   }
 
