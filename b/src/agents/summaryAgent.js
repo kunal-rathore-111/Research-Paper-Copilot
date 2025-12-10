@@ -42,35 +42,47 @@ async function summaryAgent(searchAgentAns, query) {
     }
 
     try {
-        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions",
             {
                 headers: {
-                    "Content-Type": `application/json`,
-                    "X-goog-api-key": `${API_KEY}`,
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`,
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    contents: [
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
                         {
-                            parts: [
-                                { "text": prompt }
-                            ]
+                            role: "user",
+                            content: prompt
                         }
-                    ]
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 4096
                 })
             });
+
         if (!response.ok) {
-            const responseText = await response.text(); // await here
-            throw new Error(responseText);
+            const responseText = await response.text();
+            console.error("Groq API error response:", responseText);
+            throw new Error(`Groq API error: ${responseText}`);
         }
+
         const rawData = await response.json();
+        console.log("Groq API response status:", rawData);
 
-        const output = await rawData?.candidates[0]?.content?.parts[0]?.text;
+        const output = rawData?.choices?.[0]?.message?.content;
 
-        console.log("summaryAgent executed");
+        if (!output || output.trim() === '') {
+            console.error("Empty output from Groq. Full response:", JSON.stringify(rawData, null, 2));
+            throw new Error("Model returned empty response. This might be due to content filtering or token limits.");
+        }
+
+        console.log("summaryAgent executed successfully");
 
         return output;
     } catch (e) {
+        console.error("Error in summaryAgent:", e.message);
         // rethrow to be caught by controller next(err)
         throw e;
     }

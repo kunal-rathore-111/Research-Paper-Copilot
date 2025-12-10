@@ -66,24 +66,32 @@ export default class Register extends React.Component {
 
     try {
       const data = await register({ username, email, password })
-      // expect redirectUrl or message
+      let token = null
+
+      // Try to extract token from redirectUrl
       if (data.redirectUrl) {
         try {
+          // Try parsing as full URL
           const u = new URL(data.redirectUrl)
-          const token = u.searchParams.get('token')
-          if (token && this.props.navigate) {
-            this.props.navigate('verify', { token })
-            return
-          }
+          token = u.searchParams.get('token')
         } catch (e) {
-          // ignore URL parse errors
+          // If full URL parsing fails, try extracting token from query string
+          const match = data.redirectUrl.match(/[?&]token=([^&]+)/)
+          if (match) token = match[1]
         }
-        // fallback: show info and let user follow
-        this.setState({ infoMessage: 'OTP sent — follow the link from your email.' })
-        // optionally redirect directly to returned URL
-        // window.location.href = data.redirectUrl
+      }
+
+      // Also check if backend sent token directly in response
+      if (!token && data.token) {
+        token = data.token
+      }
+
+      // Navigate to OTP page with token
+      if (token && this.props.navigate) {
+        this.props.navigate('verify', { token })
       } else {
-        this.setState({ infoMessage: data.message || 'OTP sent. Check your email.' })
+        // Show error if no token was provided
+        this.setState({ errors: { _global: ['Registration failed. No verification token received.'] } })
       }
     } catch (err) {
       // err may have shape { status, body } or body.message.fieldErrors

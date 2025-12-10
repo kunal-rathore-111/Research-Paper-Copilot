@@ -43,9 +43,12 @@ export default class OTPVerify extends React.Component {
             <h2 className="text-xl font-bold text-center" style={{ color: '#2D2D2D' }}>
               OTP Verification
             </h2>
+            <p className="text-sm text-center text-slate-600">
+              Enter the 6-digit code sent to your email
+            </p>
             {!this.props.token && (
-              <div className="rounded-md bg-red-50 border border-red-200 px-4 py-2 text-red-700 text-sm shadow-sm">
-                Missing token. Use the email link.
+              <div className="rounded-md bg-blue-50 border border-blue-200 px-4 py-2 text-blue-700 text-sm shadow-sm">
+                <strong>Note:</strong> If you just signed up, check your email for the OTP code.
               </div>
             )}
             <form onSubmit={this.onSubmit} className="space-y-5">
@@ -82,7 +85,7 @@ export default class OTPVerify extends React.Component {
               </div>
             </form>
             <div className="text-[11px] text-center text-slate-500">
-              Code expires in 10 minutes. Request a new sign-up if expired.
+              Enter the 6-digit code sent to your email. Code expires in 10 minutes.
             </div>
           </div>
         </div>
