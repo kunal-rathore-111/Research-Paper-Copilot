@@ -1,4 +1,4 @@
-const API_KEY = process.env.GEMINI_API;;
+const githubClient = require("./githubClient");
 
 async function validationAgent(summaryAgentAns, query) {
 
@@ -47,12 +47,12 @@ If the query is nonsensical, gibberish, or "dust" (unintelligible), or if no val
 *   The final output MUST be a parseable JSON object.
 *   **Crucially, ensure all required string fields (answer, summary, paperId, title, authors[i], url) are populated with meaningful, non-empty values. If information is truly unavailable for a paper's URL, use "not provided".**
 * **CRITICAL: Generate EXTENSIVE and COMPREHENSIVE content:**
-    * The "answer" field should be AT LEAST 600-800 words - provide a thorough, detailed response to the query with context, explanations, and insights.
-    * The "summary" field should be AT LEAST 1000-1500 words - create a comprehensive synthesis of ALL papers with detailed analysis, comparisons, key insights, methodologies, results, and implications.
-    * Aim for 3-4 full pages of rich, informative content when rendered as PDF.
-    * Include specific details, technical information, metrics, and quantitative results.
-    * Provide in-depth analysis and contextualization of the research.
-    * **DO NOT BE BRIEF. EXPAND ON EVERY POINT. USE AS MANY WORDS AS POSSIBLE.**
+    * The "answer" field should be AT LEAST 1000 words - provide a thorough, detailed response.
+    * The "summary" field should be AT LEAST 2000-2500 words.
+    * **CRITICAL**: Do not just list the papers. You must SYNTHESIZE them into a long, detailed narrative.
+    * **EXPAND** on every single point. If a paper mentions a concept, explain it in detail.
+    * **Aim for 5-6 full pages of text.**
+    * **DO NOT BE BRIEF.**
    
 **Example of Desired Output Format (Schema)**:
 {
@@ -84,39 +84,20 @@ Return ONLY the JSON object.
 `;
 
     try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions",
+        const messages = [
             {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-                },
-                method: "POST",
-                body: JSON.stringify({
-                    model: "gpt-4o-mini",
-                    messages: [
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.5,
-                    response_format: { type: "json_object" }
-                })
-            });
+                role: "user",
+                content: prompt
+            }
+        ];
 
-        if (!response.ok) {
-            const responseText = await response.text();
-            console.error("OpenAI API error response:", responseText);
-            throw new Error(`OpenAI API error: ${responseText}`);
-        }
+        const output = await githubClient.generateContent(messages, undefined, 0.5, { type: "json_object" });
+        console.log("GitHub Models API response received");
 
-        const output = await response.json();
-        console.log("OpenAI API response received");
-
-        const validationAgentAns = output?.choices?.[0]?.message?.content;
+        const validationAgentAns = output;
 
         if (!validationAgentAns || validationAgentAns.trim() === '') {
-            console.error("Empty output from OpenAI. Full response:", JSON.stringify(output, null, 2));
+            console.error("Empty output from GitHub Models.");
             throw new Error("Model returned empty response.");
         }
 
