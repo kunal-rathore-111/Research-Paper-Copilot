@@ -47,11 +47,12 @@ If the query is nonsensical, gibberish, or "dust" (unintelligible), or if no val
 *   The final output MUST be a parseable JSON object.
 *   **Crucially, ensure all required string fields (answer, summary, paperId, title, authors[i], url) are populated with meaningful, non-empty values. If information is truly unavailable for a paper's URL, use "not provided".**
 * **CRITICAL: Generate EXTENSIVE and COMPREHENSIVE content:**
-    * The "answer" field should be AT LEAST 400-600 words - provide a thorough, detailed response to the query with context, explanations, and insights.
-    * The "summary" field should be AT LEAST 800-1200 words - create a comprehensive synthesis of ALL papers with detailed analysis, comparisons, key insights, methodologies, results, and implications.
-    * Aim for 2-3 full pages of rich, informative content when rendered as PDF.
+    * The "answer" field should be AT LEAST 600-800 words - provide a thorough, detailed response to the query with context, explanations, and insights.
+    * The "summary" field should be AT LEAST 1000-1500 words - create a comprehensive synthesis of ALL papers with detailed analysis, comparisons, key insights, methodologies, results, and implications.
+    * Aim for 3-4 full pages of rich, informative content when rendered as PDF.
     * Include specific details, technical information, metrics, and quantitative results.
     * Provide in-depth analysis and contextualization of the research.
+    * **DO NOT BE BRIEF. EXPAND ON EVERY POINT. USE AS MANY WORDS AS POSSIBLE.**
    
 **Example of Desired Output Format (Schema)**:
 {
@@ -83,35 +84,40 @@ Return ONLY the JSON object.
 `;
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+        const response = await fetch("https://api.openai.com/v1/chat/completions",
             {
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }]
+                    model: "gpt-4o-mini",
+                    messages: [
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.5,
+                    response_format: { type: "json_object" }
                 })
             });
 
         if (!response.ok) {
             const responseText = await response.text();
-            console.error("Gemini API error response:", responseText);
-            throw new Error(`Gemini API error: ${responseText}`);
+            console.error("OpenAI API error response:", responseText);
+            throw new Error(`OpenAI API error: ${responseText}`);
         }
 
         const output = await response.json();
-        console.log("Gemini API response received");
+        console.log("OpenAI API response received");
 
-        const validationAgentAns = output?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const validationAgentAns = output?.choices?.[0]?.message?.content;
 
         if (!validationAgentAns || validationAgentAns.trim() === '') {
-            console.error("Empty output from Gemini. Full response:", JSON.stringify(output, null, 2));
-            throw new Error("Model returned empty response. This might be due to content filtering or token limits.");
+            console.error("Empty output from OpenAI. Full response:", JSON.stringify(output, null, 2));
+            throw new Error("Model returned empty response.");
         }
 
         // Strip markdown code blocks if present (```json ... ``` or ``` ... ```)

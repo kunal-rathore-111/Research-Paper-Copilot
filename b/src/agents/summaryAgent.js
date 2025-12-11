@@ -27,15 +27,16 @@ async function summaryAgent(searchAgentAns, query) {
             2. Key Findings:
             3. Important Limitations:
             4. Links:
-        7. **CRITICAL: Provide extensive, comprehensive, and detailed summaries. Each paper should have AT LEAST 300-500 words of analysis. Include technical details, methodologies, results, implications, and future work. Make the output rich and informative - aim for 2-3 full pages of content when rendered as PDF.**
+        7. **CRITICAL: Provide extensive, comprehensive, and detailed summaries. Each paper should have AT LEAST 500-700 words of analysis. Include technical details, methodologies, results, implications, and future work. Make the output rich and informative - aim for 3-4 full pages of content when rendered as PDF.**
         8. **Add detailed comparative analysis between papers where applicable.**
         9. **Include specific metrics, numbers, and quantitative results mentioned in the abstracts.**
         10. **Discuss the broader context and significance of each paper's contributions.**
+        11. **DO NOT BE BRIEF. EXPAND ON EVERY POINT. USE AS MANY WORDS AS POSSIBLE TO EXPLAIN THE CONCEPTS.**
 
         Papers: ${dataInString}
         `
 
-    if (!API_KEY) {
+    if (!process.env.OPENAI_API_KEY) {
         return {
             answer: '',
             papers: [],
@@ -45,35 +46,39 @@ async function summaryAgent(searchAgentAns, query) {
     }
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+        const response = await fetch("https://api.openai.com/v1/chat/completions",
             {
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }]
+                    model: "gpt-4o-mini",
+                    messages: [
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
                 })
             });
 
         if (!response.ok) {
             const responseText = await response.text();
-            console.error("Gemini API error response:", responseText);
-            throw new Error(`Gemini API error: ${responseText}`);
+            console.error("OpenAI API error response:", responseText);
+            throw new Error(`OpenAI API error: ${responseText}`);
         }
 
         const rawData = await response.json();
-        console.log("Gemini API response received");
+        console.log("OpenAI API response received");
 
-        const output = rawData?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const output = rawData?.choices?.[0]?.message?.content;
 
         if (!output || output.trim() === '') {
-            console.error("Empty output from Gemini. Full response:", JSON.stringify(rawData, null, 2));
-            throw new Error("Model returned empty response. This might be due to content filtering or token limits.");
+            console.error("Empty output from OpenAI. Full response:", JSON.stringify(rawData, null, 2));
+            throw new Error("Model returned empty response.");
         }
 
         console.log("summaryAgent executed successfully");
