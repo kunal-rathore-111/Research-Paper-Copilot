@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+
+/* Optional: kuch basic global styles */
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Hero gradient overlay */
+.hero-surface {
+    position: relative;
+    isolation: isolate;
+    background:
+        radial-gradient(circle at 75% 25%, rgba(99, 102, 241, .35), transparent 60%),
+        radial-gradient(circle at 25% 75%, rgba(14, 165, 233, .35), transparent 65%);
+}
+
+/* Subtle grid background */
+.bg-grid {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, .06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: center;
+}
+
+/* Glass panel variant */
+.panel-glow {
+    position: relative;
+    backdrop-filter: blur(18px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, .85), rgba(255, 255, 255, .65));
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 24px;
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, .18), 0 2px 6px -2px rgba(0, 0, 0, .1);
+    overflow: hidden;
+}
+
+.panel-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(120deg, rgba(255, 255, 255, .7) 0%, rgba(255, 255, 255, 0) 40%),
+        linear-gradient(180deg, rgba(99, 102, 241, .25), rgba(14, 165, 233, .25));
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
+}
+
+/* Footer blur band */
+.footer-blur {
+    backdrop-filter: blur(22px);
+    background: linear-gradient(90deg, rgba(255, 255, 255, .65), rgba(255, 255, 255, .55));
+    border-top: 1px solid rgba(255, 255, 255, .5);
+}
+
+/* Animated underline on nav links */
+.nav-underline {
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.nav-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    transition: width .4s cubic-bezier(.16, .8, .3, 1);
+    border-radius: 999px;
+}
+
+.nav-underline:hover::after {
+    width: 100%;
+}
+
+/* Floating icon hover pulse */
+.icon-float {
+    transition: transform .5s cubic-bezier(.16, .8, .3, 1);
+}
+
+.icon-float:hover {
+    transform: translateY(-6px) scale(1.06);
+}
+
+/* Gradient ring utility */
+.gradient-ring {
+    position: relative;
+}
+
+.gradient-ring::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    background: conic-gradient(from 0deg, var(--color-primary), var(--color-accent), var(--color-primary));
+    padding: 3px;
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: spin 12s linear infinite;
+    opacity: .75;
+}
+
+/* Depth shadow hover */
+.depth-hover {
+    transition: box-shadow .45s, transform .45s;
+}
+
+.depth-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px -8px rgba(0, 0, 0, .28), 0 4px 12px -3px rgba(0, 0, 0, .18);
+}
+
+/* Responsive container utility */
+.page-wrap {
+    width: min(1200px, 92vw);
+    margin-inline: auto;
+    padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+/* Dark mode fine-tuning */
+body.dark .panel-glow {
+    background: linear-gradient(145deg, rgba(30, 30, 40, .92), rgba(30, 30, 40, .78));
+    border-color: rgba(255, 255, 255, .08);
+}
+
+body.dark .footer-blur {
+    background: linear-gradient(90deg, rgba(20, 20, 28, .75), rgba(20, 20, 30, .6));
+    border-top-color: rgba(255, 255, 255, .07);
+}
+
+/* Reduced motion adjustments */
+@media (prefers-reduced-motion: reduce) {
+
+    .icon-float:hover,
+    .depth-hover:hover {
+        transform: none;
+    }
+}

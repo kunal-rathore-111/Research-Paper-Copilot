@@ -1,4 +1,4 @@
-const githubClient = require("./githubClient");
+const API_KEY = process.env.GEMINI_API;
 
 const returnRawHtml = require("../utils/rawHtml");
 
@@ -16,8 +16,7 @@ async function generateHtml(conversation) {
               - DO NOT include any code block markers like \`\`\`html.
               - Use <section> for main categories: Query, Answer, Papers, Summary, Validation.
               - Use <article> for each paper including title, authors, link, and paper ID.
-              - Use <h1> for the main heading, which MUST be exactly: "Research Report: ${query}".
-              - Use <h2> for section headings, <h3> for paper titles.
+              - Use <h1> for main heading, <h2> for section headings, <h3> for paper titles.
               - Bold important labels like Authors, Link, Paper ID, Feedback.
               - Include inline CSS for better readability:
                   - Add spacing (margin/padding) between sections and articles.
@@ -39,18 +38,39 @@ async function generateHtml(conversation) {
   console.log("executing htmlagent");
 
   try {
-    const messages = [
+    const response = await fetch("https://api.openai.com/v1/chat/completions",
       {
-        role: "user",
-        content: prompt
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        method: "POST",
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "user",
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
+        })
       }
-    ];
+    )
 
-    const html = await githubClient.generateContent(messages);
-    console.log("htmlagent executed successfully with GitHub Models");
+    if (!response.ok) {
+      const responseText = await response.text();
+      console.error("OpenAI API error response:", responseText);
+      throw new Error(`OpenAI API error: ${response.status} - ${responseText}`);
+    }
+
+    const rawHtml = await response.json();
+    console.log("htmlagent executed successfully with OpenAI");
+
+    const html = rawHtml?.choices?.[0]?.message?.content;
 
     if (!html || html.trim() === '') {
-      console.error("Empty output from GitHub Models.");
+      console.error("Empty output from OpenAI. Full response:", JSON.stringify(rawHtml, null, 2));
       throw new Error("Model returned empty HTML response.");
     }
 
@@ -61,6 +81,8 @@ async function generateHtml(conversation) {
     console.error("Error in html agent:", error.message);
     return returnRawHtml(query, answer, papers, summary, validation);
   }
+
 }
+
 
 module.exports = generateHtml;

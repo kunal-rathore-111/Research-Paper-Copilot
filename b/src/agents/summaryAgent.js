@@ -1,4 +1,4 @@
-const API_KEY = process.env.GEMINI_API;
+const githubClient = require("./githubClient");
 
 async function summaryAgent(searchAgentAns, query) {
 
@@ -27,16 +27,20 @@ async function summaryAgent(searchAgentAns, query) {
             2. Key Findings:
             3. Important Limitations:
             4. Links:
-        7. **CRITICAL: Provide extensive, comprehensive, and detailed summaries. Each paper should have AT LEAST 500-700 words of analysis. Include technical details, methodologies, results, implications, and future work. Make the output rich and informative - aim for 3-4 full pages of content when rendered as PDF.**
-        8. **Add detailed comparative analysis between papers where applicable.**
-        9. **Include specific metrics, numbers, and quantitative results mentioned in the abstracts.**
-        10. **Discuss the broader context and significance of each paper's contributions.**
-        11. **DO NOT BE BRIEF. EXPAND ON EVERY POINT. USE AS MANY WORDS AS POSSIBLE TO EXPLAIN THE CONCEPTS.**
+        7. **CRITICAL: Provide EXTREMELY EXTENSIVE, COMPREHENSIVE, and DETAILED summaries. Each paper should have AT LEAST 800-1000 words of analysis.**
+        8. **For each paper, you MUST cover:**
+            - **Methodology**: Detailed explanation of how the research was conducted.
+            - **Results**: Specific quantitative data, numbers, and metrics found.
+            - **Discussion**: Deep dive into the implications.
+            - **Comparison**: How it relates to other papers in this list.
+        9. **DO NOT BE BRIEF. DO NOT SUMMARIZE IN ONE SENTENCE. WRITE ESSAYS FOR EACH PAPER.**
+        10. **Make the output rich and informative - aim for 5-6 full pages of content.**
+        11. **EXPAND ON EVERY POINT. USE AS MANY WORDS AS POSSIBLE.**
 
         Papers: ${dataInString}
         `
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.GITHUB_TOKEN) {
         return {
             answer: '',
             papers: [],
@@ -46,38 +50,18 @@ async function summaryAgent(searchAgentAns, query) {
     }
 
     try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions",
+        const messages = [
             {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-                },
-                method: "POST",
-                body: JSON.stringify({
-                    model: "gpt-4o-mini",
-                    messages: [
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.7,
-                })
-            });
+                role: "user",
+                content: prompt
+            }
+        ];
 
-        if (!response.ok) {
-            const responseText = await response.text();
-            console.error("OpenAI API error response:", responseText);
-            throw new Error(`OpenAI API error: ${responseText}`);
-        }
-
-        const rawData = await response.json();
-        console.log("OpenAI API response received");
-
-        const output = rawData?.choices?.[0]?.message?.content;
+        const output = await githubClient.generateContent(messages);
+        console.log("GitHub Models API response received");
 
         if (!output || output.trim() === '') {
-            console.error("Empty output from OpenAI. Full response:", JSON.stringify(rawData, null, 2));
+            console.error("Empty output from GitHub Models.");
             throw new Error("Model returned empty response.");
         }
 

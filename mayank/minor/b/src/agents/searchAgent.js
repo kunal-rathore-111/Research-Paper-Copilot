@@ -7,7 +7,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 async function searchWithSemanticScholar(query) {
     console.log("Falling back to Semantic Scholar API...");
 
-    const url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(query)}&limit=5&fields=title,abstract,authors,url,publicationDate,venue`;
+    const url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(query)}&limit=7&fields=title,abstract,authors,url,publicationDate,venue`;
 
     try {
         const response = await fetch(url, {
@@ -50,7 +50,7 @@ async function searchAgent(query, maxRetries = 3) {
 
     console.log("searchAgent executing");
 
-    const url = `https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(query)}&start=0&max_results=5`;
+    const url = `https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(query)}&start=0&max_results=7`;
 
     // ArXiv API recommends adding a User-Agent header
     const headers = {
