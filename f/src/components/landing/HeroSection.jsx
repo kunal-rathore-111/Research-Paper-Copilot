@@ -35,7 +35,7 @@ export default function HeroSection({ navigate }) {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
                         >
-                            <span style={{ color: '#FF6B4A', fontStyle: 'italic' }}>DeepDraft</span> Research
+                            <span style={{ color: '#FF6B4A', fontStyle: 'italic' }}>Telecom</span> Sahayak
                         </motion.span>
                     </h1>
 
